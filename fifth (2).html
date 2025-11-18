@@ -1,0 +1,2539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoFlow - Zero-Code Automation</title>
+    
+<style>
+     
+        /* CSS Variables for theming */
+        :root {
+            --primary: #1a0ef5;
+            --primary-light: #4895ef;
+            --secondary: #09f611;
+            --success: #4cc9f0;
+            --warning: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        /* Dark mode variables */
+        [data-theme="dark"] {
+            --light: #121212;
+            --dark: #f8f9fa;
+            --gray-light: #2d2d2d;
+            --gray: #a0a0a0;
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
+            transition: var(--transition);
+        }
+
+        h1, h2, h3, h4 {
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        a {
+            text-decoration: none;
+            color: var(--primary);
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .hero-slider {
+            height: 100vh;
+            position: relative;
+        }
+
+        .hero-slide {
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        /* Black Overlay */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.55); /* Black overlay */
+            z-index: 1;
+        }
+
+        /* Text Content */
+        .hero-content {
+            position: absolute;
+            z-index: 2;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            width: 70%;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .hero-btn {
+            padding: 10px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+        }
+
+        /* Indicators Bigger */
+        .carousel-indicators button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            text-align: center;
+            border-radius: var(--border-radius);
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: var(--secondary);
+            outline: 2px solid var(--primary-light);
+        }
+
+        .btn-secondary {
+            background-color: var(--gray-light);
+            color: var(--dark);
+        }
+
+        .btn-secondary:hover, .btn-secondary:focus {
+            background-color: var(--gray);
+            color: white;
+            outline: 2px solid var(--gray);
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .btn-success:hover, .btn-success:focus {
+            background-color: #3aa8d0;
+            outline: 2px solid var(--success);
+        }
+
+        .btn-danger {
+            background-color: var(--warning);
+            color: white;
+        }
+
+        .btn-danger:hover, .btn-danger:focus {
+            background-color: #d61a6e;
+            outline: 2px solid var(--warning);
+        }
+
+        .card {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--gray-light);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--light);
+            box-shadow: var(--box-shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: var(--transition);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--dark);
+            font-weight: 500;
+        }
+
+        .nav-links a:hover, .nav-links a:focus {
+            color: var(--primary);
+            outline: none;
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+
+        .font-size-controls {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .font-size-btn {
+            background: var(--gray-light);
+            border-radius: 50%;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* User Controls */
+        .user-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .user-dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 0.5rem 0;
+            min-width: 150px;
+            display: none;
+            z-index: 1000;
+        }
+         
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-item {
+            display: block;
+            padding: 0.5rem 1rem;
+            color: var(--dark);
+            text-decoration: none;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .dropdown-item:hover, .dropdown-item:focus {
+            background: var(--gray-light);
+            outline: none;
+        }
+
+       
+        /* Features Section */
+        .features {
+            padding: 4rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Authentication Modal */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .auth-modal.active {
+            display: flex;
+        }
+
+        .auth-container {
+            background: var(--light);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--box-shadow);
+        }
+
+        .auth-tabs {
+            display: flex;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 3px solid transparent;
+        }
+
+        .auth-tab.active {
+            border-bottom-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .auth-content {
+            padding: 2rem;
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--gray);
+            border-radius: var(--border-radius);
+            background: var(--light);
+            color: var(--dark);
+        }
+
+        .form-control:focus {
+            outline: 2px solid var(--primary);
+            border-color: var(--primary);
+        }
+
+        .auth-footer {
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .auth-footer a {
+            color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* Automation Builder */
+        .automation-builder {
+            padding: 4rem 0;
+            background-color: var(--gray-light);
+        }
+
+        .builder-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .builder-sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .builder-canvas {
+            flex: 2;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            min-height: 400px;
+            padding: 1.5rem;
+            min-width: 300px;
+        }
+
+        .action-item {
+            background: var(--light);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            cursor: move;
+            border: 1px solid var(--gray-light);
+        }
+
+        .action-item:focus {
+            outline: 2px solid var(--primary);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--gray);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 1rem;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .workflow-step {
+            background: var(--light);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Form Data Storage Section */
+        .form-data-storage {
+            padding: 4rem 0;
+        }
+
+        .form-data-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .form-data-sidebar {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .form-data-content {
+            flex: 2;
+            min-width: 300px;
+        }
+
+        .form-data-tabs {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-data-tab {
+            padding: 1rem;
+            background: var(--light);
+            border-radius: var(--border-radius);
+            border: 1px solid var(--gray-light);
+            cursor: pointer;
+            text-align: left;
+            transition: var(--transition);
+        }
+        .carousel-indicators button {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .form-data-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .form-data-tab-content {
+            display: none;
+        }
+
+        .form-data-tab-content.active {
+            display: block;
+        }
+
+        .form-data-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-data-card {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .form-data-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .form-data-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .field-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .field-item {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--gray-light);
+            border-radius: var(--border-radius);
+        }
+
+        .field-name {
+            flex: 1;
+        }
+
+        .field-value {
+            flex: 2;
+        }
+
+        .field-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Workflow Management */
+        .workflow-management {
+            padding: 4rem 0;
+            background-color: var(--gray-light);
+        }
+
+        .workflow-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .workflow-card {
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .workflow-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--light);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--gray-light);
+        }
+
+        .footer-links a:hover, .footer-links a:focus {
+            color: white;
+            outline: none;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray);
+        }
+
+        /* Accessibility Features */
+        .skip-link {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: 8px;
+            z-index: 1000;
+            transition: top 0.3s;
+        }
+
+        .skip-link:focus {
+            top: 0;
+        }
+
+        .high-contrast {
+            filter: contrast(150%);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--light);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark);
+        }
+          .profile{
+            font-weight: 800;
+
+           
+         }
+         .profile img{
+            width: 25px;
+            height: 25px;
+         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .controls {
+                margin-top: 1rem;
+            }
+
+            .user-controls {
+                margin-top: 1rem;
+            }
+
+            .builder-container {
+                flex-direction: column;
+            }
+
+            .form-data-container {
+                flex-direction: column;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+
+        /* Animation for workflow execution */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .executing {
+            animation: pulse 1s infinite;
+            background-color: rgba(76, 201, 240, 0.2);
+        }
+      
+    </style>
+</head>
+<body>
+    <!-- Skip link for keyboard navigation -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar" aria-label="Main navigation">
+                <div class="logo">AutoFlow</div>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#builder">Builder</a>
+                    <a href="#form-data">Form Data</a>
+                    <a href="#workflows">My Workflows</a>
+                    <a href="#help">Help</a>
+                     <select class="search-select">
+                <option>Language</option>
+                <option>English</option>
+                <option>Hindi</option>
+                <option>Japanese</option>
+                <option>Books</option>
+                <option>Baby Toys</option>
+                <option>Watches</option>
+                <option>Electronics</option>
+                <option>Furniture</option>
+            </select>
+                </div>
+                <div class="controls">
+                    <div class="font-size-controls">
+                        <button class="font-size-btn" id="decrease-font" aria-label="Decrease font size">A-</button>
+                        <button class="font-size-btn" id="reset-font" aria-label="Reset font size">A</button>
+                        <button class="font-size-btn" id="increase-font" aria-label="Increase font size">A+</button>
+                    </div>
+                    <button id="contrast-toggle" class="btn btn-secondary">High Contrast</button>
+                    <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">🌙</button>
+                    <div class="user-controls">
+                        <button id="login-btn" class="btn btn-primary">Login</button>
+                        <div class="user-dropdown" id="user-dropdown" style="display: none;">
+                            <div class="user-avatar" id="user-avatar">U</div>
+                            <div class="dropdown-menu" id="dropdown-menu">
+                                <button class="dropdown-item" id="profile-btn">My Profile</button>
+                                <button class="dropdown-item" id="logout-btn">Logout</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile">
+                    <a href ="#profile">Profile</a>
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/032/176/191/small/business-avatar-profile-black-icon-man-of-user-symbol-in-trendy-flat-style-isolated-on-male-profile-people-diverse-face-for-social-network-or-web-vector.jpg">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Authentication Modal -->
+    <div class="auth-modal" id="auth-modal">
+        <div class="auth-container">
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+            <div class="auth-content">
+                <!-- Login Form -->
+                <form class="auth-form active" id="login-form">
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <input type="email" id="login-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                    <div class="auth-footer">
+                        <p>Don't have an account? <a id="show-signup">Sign up</a></p>
+                    </div>
+                </form>
+
+                <!-- Sign Up Form -->
+                <form class="auth-form" id="signup-form">
+                    <div class="form-group">
+                        <label for="signup-name">Full Name</label>
+                        <input type="text" id="signup-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <input type="email" id="signup-email" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-password">Password</label>
+                        <input type="password" id="signup-password" class="form-control" required minlength="6">
+                    </div>
+                    <div class="form-group">
+                        <label for="signup-confirm-password">Confirm Password</label>
+                        <input type="password" id="signup-confirm-password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Sign Up</button>
+                    <div class="auth-footer">
+                        <p>Already have an account? <a id="show-login">Login</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDES -->
+    <div class="carousel-inner">
+
+        <!-- Slide 1 -->
+        <div class="carousel-item active">
+            <div class="hero-slide" style="background-image:url('img/1.webp')">
+                <div class="hero-overlay"></div>
+                +
+                <div class="hero-content">
+                    <h1>Welcome to Our Website</h1>
+                    <h2>Automate Your Online Work Without Code</h2>
+                    <p>
+                        Create Powerful automations for forms,notifications and repetitive tasks with our simple drag and drop interface
+                    </p>
+                    <a href="https://kissflow.com/low-code/zero-code/zero-code-overview/" class="btn btn-primary hero-btn">Read More</a>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+    </div>
+    
+
+
+
+
+   
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title"><u>Why Choose AutoFlow?</u></h2>
+            <div class="features-grid">
+                <div class="feature-card card">
+                    <div class="feature-icon" aria-hidden="true">🚀</div>
+                    <h3>No Coding Required</h3>
+                    <p>Create automations through simple visual tools - no programming knowledge needed.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon" aria-hidden="true">⏱️</div>
+                    <h3>Save Time</h3>
+                    <p>Automate repetitive tasks and focus on what matters most.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon" aria-hidden="true">📝</div>
+                    <h3>Smart Form Filling</h3>
+                    <p>Store form data and automatically fill out online forms with a single click.</p>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon" aria-hidden="true">🔒</div>
+                    <h3>Privacy Focused</h3>
+                    <p>Your data stays secure and private with our encryption protocols.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Automation Builder -->
+    <section id="builder" class="automation-builder">
+        <div class="container">
+            <h2 class="section-title">Create Your Automation</h2>
+            <div class="builder-container">
+                <div class="builder-sidebar">
+                    <h3>Available Actions</h3>
+                    <div class="action-item" draggable="true" data-action="fill-form" tabindex="0">
+                        <h4>Fill Form</h4>
+                        <p>Automatically fill out online forms using stored data</p>
+                    </div>
+                    <div class="action-item" draggable="true" data-action="click-button" tabindex="0">
+                        <h4>Click Button</h4>
+                        <p>Automatically click buttons on websites</p>
+                    </div>
+                    <div class="action-item" draggable="true" data-action="send-notification" tabindex="0">
+                        <h4>Send Notification</h4>
+                        <p>Send alerts at specific times</p>
+                    </div>
+                    <div class="action-item" draggable="true" data-action="extract-data" tabindex="0">
+                        <h4>Extract Data</h4>
+                        <p>Collect information from websites</p>
+                    </div>
+                    <div class="action-item" draggable="true" data-action="schedule-task" tabindex="0">
+                        <h4>Schedule Task</h4>
+                        <p>Run automations at specific times</p>
+                    </div>
+                </div>
+                <div class="builder-canvas">
+                    <h3>Your Automation Workflow</h3>
+                    <div class="drop-zone" id="workflow-area">
+                        Drag actions here to build your automation
+                    </div>
+                    <div id="workflow-steps"></div>
+                    <div class="workflow-controls" style="margin-top: 1rem; display: flex; gap: 1rem;">
+                        <button id="run-automation" class="btn btn-success">Run Automation</button>
+                        <button id="save-workflow" class="btn btn-primary">Save Workflow</button>
+                        <button id="clear-workflow" class="btn btn-secondary">Clear</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Form Data Storage Section -->
+    <section id="form-data" class="form-data-storage">
+        <div class="container">
+            <h2 class="section-title">Form Data Storage</h2>
+            <div class="form-data-container">
+                <div class="form-data-sidebar">
+                    <div class="form-data-tabs">
+                        <button class="form-data-tab active" data-tab="my-data">My Form Data</button>
+                        <button class="form-data-tab" data-tab="add-data">Add New Data</button>
+                        <button class="form-data-tab" data-tab="templates">Form Templates</button>
+                    </div>
+                </div>
+                <div class="form-data-content">
+                    <!-- My Form Data Tab -->
+                    <div class="form-data-tab-content active" id="my-data-tab">
+                        <h3>Stored Form Data</h3>
+                        <p>Manage your saved form data that can be used to automatically fill out online forms.</p>
+                        
+                        <div class="form-data-list" id="form-data-list">
+                            <!-- Form data will be loaded here -->
+                        </div>
+                    </div>
+
+                    <!-- Add New Data Tab -->
+                    <div class="form-data-tab-content" id="add-data-tab">
+                        <h3>Add New Form Data</h3>
+                        <p>Create a new form data profile that can be used to automatically fill out forms.</p>
+                        
+                        <div class="card">
+                            <form class="form-data-form" id="add-form-data-form">
+                                <div class="form-group">
+                                    <label for="form-data-name">Profile Name</label>
+                                    <input type="text" id="form-data-name" class="form-control" placeholder="e.g., Personal Information, Job Application" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="form-data-description">Description</label>
+                                    <textarea id="form-data-description" class="form-control" placeholder="Describe what this form data is for"></textarea>
+                                </div>
+                                
+                                <h4>Form Fields</h4>
+                                <div class="field-list" id="field-list">
+                                    <!-- Fields will be added here -->
+                                </div>
+                                
+                                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                                    <button type="button" class="btn btn-secondary" id="add-field-btn">Add Field</button>
+                                    <button type="submit" class="btn btn-primary">Save Form Data</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Form Templates Tab -->
+                    <div class="form-data-tab-content" id="templates-tab">
+                        <h3>Form Templates</h3>
+                        <p>Use these templates to quickly create form data for common scenarios.</p>
+                        
+                        <div class="form-data-list">
+                            <div class="form-data-card card">
+                                <h4>Personal Information</h4>
+                                <p>Standard personal details like name, address, phone number, and email.</p>
+                                <div class="form-data-actions">
+                                    <button class="btn btn-primary use-template" data-template="personal">Use Template</button>
+                                </div>
+                            </div>
+                            <div class="form-data-card card">
+                                <h4>Job Application</h4>
+                                <p>Information commonly required for job applications.</p>
+                                <div class="form-data-actions">
+                                    <button class="btn btn-primary use-template" data-template="job">Use Template</button>
+                                </div>
+                            </div>
+                            <div class="form-data-card card">
+                                <h4>E-commerce Checkout</h4>
+                                <p>Shipping and payment information for online shopping.</p>
+                                <div class="form-data-actions">
+                                    <button class="btn btn-primary use-template" data-template="ecommerce">Use Template</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Management -->
+    <section id="workflows" class="workflow-management">
+        <div class="container">
+            <h2 class="section-title">My Workflows</h2>
+            <div class="workflow-list" id="workflow-list">
+                <!-- Workflows will be loaded here -->
+            </div>
+            <div style="text-align: center; margin-top: 2rem;">
+                <button id="import-workflow" class="btn btn-secondary">Import Workflow</button>
+                <input type="file" id="import-file" accept=".json" style="display: none;">
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>AutoFlow</h3>
+                    <p>Making automation accessible to everyone, regardless of technical skills.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#builder">Builder</a></li>
+                        <li><a href="#form-data">Form Data</a></li>
+                        <li><a href="#workflows">My Workflows</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <ul class="footer-links">
+                        <li><a href="#help">Help Center</a></li>
+                        <li><a href="#tutorials">Tutorials</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Legal</h3>
+                    <ul class="footer-links">
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AutoFlow. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Save Workflow Modal -->
+    <div class="modal" id="save-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Save Workflow</h3>
+                <button class="close-modal" id="close-save-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="save-workflow-form">
+                <div style="margin-bottom: 1rem;">
+                    <label for="workflow-name">Workflow Name</label>
+                    <input type="text" id="workflow-name" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--gray); border-radius: var(--border-radius);">
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label for="workflow-description">Description (optional)</label>
+                    <textarea id="workflow-description" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--gray); border-radius: var(--border-radius);"></textarea>
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" id="cancel-save">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Configure Fill Form Modal -->
+    <div class="modal" id="fill-form-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Configure Fill Form Action</h3>
+                <button class="close-modal" id="close-fill-form-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="fill-form-config-form">
+                <div style="margin-bottom: 1rem;">
+                    <label for="form-data-select">Select Form Data Profile</label>
+                    <select id="form-data-select" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--gray); border-radius: var(--border-radius);">
+                        <option value="">-- Select a form data profile --</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label for="form-url">Form URL (optional)</label>
+                    <input type="text" id="form-url" placeholder="https://example.com/form" style="width: 100%; padding: 0.5rem; margin-top: 0.5rem; border: 1px solid var(--gray); border-radius: var(--border-radius);">
+                </div>
+                <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                    <button type="button" class="btn btn-secondary" id="cancel-fill-form">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Configuration</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Form Data Modal -->
+    <div class="modal" id="edit-form-data-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Form Data</h3>
+                <button class="close-modal" id="close-edit-form-data-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <form id="edit-form-data-form">
+                <input type="hidden" id="edit-form-data-id">
+                <div style="margin-bottom: 1rem;">
+                    <label for="edit-form-data-name">Profile Name</label>
+                    <input type="text" id="edit-form-data-name" class="form-control" required>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label for="edit-form-data-description">Description</label>
+                    <textarea id="edit-form-data-description" class="form-control"></textarea>
+                </div>
+                
+                <h4>Form Fields</h4>
+                <div class="field-list" id="edit-field-list">
+                    <!-- Fields will be added here -->
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" class="btn btn-secondary" id="add-edit-field-btn">Add Field</button>
+                    <button type="submit" class="btn btn-primary">Update Form Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Authentication System
+        class AuthSystem {
+            constructor() {
+                this.currentUser = null;
+                this.users = this.loadUsers();
+                this.init();
+            }
+
+            // Load users from localStorage
+            loadUsers() {
+                const stored = localStorage.getItem('autoflow-users');
+                return stored ? JSON.parse(stored) : [];
+            }
+
+            // Save users to localStorage
+            saveUsers() {
+                localStorage.setItem('autoflow-users', JSON.stringify(this.users));
+            }
+
+            // Initialize authentication system
+            init() {
+                // Check if user is already logged in
+                const savedUser = localStorage.getItem('autoflow-current-user');
+                if (savedUser) {
+                    this.currentUser = JSON.parse(savedUser);
+                    this.updateUI();
+                }
+            }
+
+            // Register a new user
+            register(name, email, password) {
+                // Check if user already exists
+                if (this.users.find(user => user.email === email)) {
+                    return { success: false, message: 'User with this email already exists' };
+                }
+
+                // Create new user
+                const newUser = {
+                    id: Date.now().toString(),
+                    name,
+                    email,
+                    password, // In a real app, this should be hashed
+                    createdAt: new Date().toISOString()
+                };
+
+                this.users.push(newUser);
+                this.saveUsers();
+
+                // Automatically log in the new user
+                this.login(email, password);
+
+                return { success: true, message: 'Account created successfully' };
+            }
+
+            // Login user
+            login(email, password) {
+                const user = this.users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    this.currentUser = { ...user };
+                    localStorage.setItem('autoflow-current-user', JSON.stringify(this.currentUser));
+                    this.updateUI();
+                    return { success: true, message: 'Login successful' };
+                } else {
+                    return { success: false, message: 'Invalid email or password' };
+                }
+            }
+
+            // Logout user
+            logout() {
+                this.currentUser = null;
+                localStorage.removeItem('autoflow-current-user');
+                this.updateUI();
+            }
+
+            // Update UI based on authentication state
+            updateUI() {
+                const loginBtn = document.getElementById('login-btn');
+                const userDropdown = document.getElementById('user-dropdown');
+                const userAvatar = document.getElementById('user-avatar');
+
+                if (this.currentUser) {
+                    // User is logged in
+                    loginBtn.style.display = 'none';
+                    userDropdown.style.display = 'block';
+                    
+                    // Set user avatar with first letter of name
+                    const initials = this.currentUser.name
+                        .split(' ')
+                        .map(n => n[0])
+                        .join('')
+                        .toUpperCase();
+                    userAvatar.textContent = initials;
+                } else {
+                    // User is not logged in
+                    loginBtn.style.display = 'block';
+                    userDropdown.style.display = 'none';
+                }
+            }
+
+            // Get current user
+            getCurrentUser() {
+                return this.currentUser;
+            }
+
+            // Check if user is logged in
+            isLoggedIn() {
+                return this.currentUser !== null;
+            }
+        }
+
+        // Form Data Storage Engine
+        class FormDataEngine {
+            constructor() {
+                this.formDataProfiles = this.loadFormData();
+                this.formTemplates = this.getFormTemplates();
+            }
+
+            // Load form data from localStorage
+            loadFormData() {
+                const stored = localStorage.getItem('autoflow-form-data');
+                return stored ? JSON.parse(stored) : [];
+            }
+
+            // Save form data to localStorage
+            saveFormData() {
+                localStorage.setItem('autoflow-form-data', JSON.stringify(this.formDataProfiles));
+            }
+
+            // Get predefined form templates
+            getFormTemplates() {
+                return {
+                    personal: {
+                        name: "Personal Information",
+                        description: "Standard personal details",
+                        fields: [
+                            { name: "first_name", value: "", label: "First Name" },
+                            { name: "last_name", value: "", label: "Last Name" },
+                            { name: "email", value: "", label: "Email Address" },
+                            { name: "phone", value: "", label: "Phone Number" },
+                            { name: "address", value: "", label: "Street Address" },
+                            { name: "city", value: "", label: "City" },
+                            { name: "state", value: "", label: "State/Province" },
+                            { name: "zip", value: "", label: "ZIP/Postal Code" },
+                            { name: "country", value: "", label: "Country" }
+                        ]
+                    },
+                    job: {
+                        name: "Job Application",
+                        description: "Information for job applications",
+                        fields: [
+                            { name: "first_name", value: "", label: "First Name" },
+                            { name: "last_name", value: "", label: "Last Name" },
+                            { name: "email", value: "", label: "Email Address" },
+                            { name: "phone", value: "", label: "Phone Number" },
+                            { name: "linkedin", value: "", label: "LinkedIn Profile" },
+                            { name: "portfolio", value: "", label: "Portfolio Website" },
+                            { name: "current_company", value: "", label: "Current Company" },
+                            { name: "current_position", value: "", label: "Current Position" },
+                            { name: "years_experience", value: "", label: "Years of Experience" }
+                        ]
+                    },
+                    ecommerce: {
+                        name: "E-commerce Checkout",
+                        description: "Shipping and payment information",
+                        fields: [
+                            { name: "first_name", value: "", label: "First Name" },
+                            { name: "last_name", value: "", label: "Last Name" },
+                            { name: "email", value: "", label: "Email Address" },
+                            { name: "phone", value: "", label: "Phone Number" },
+                            { name: "address", value: "", label: "Street Address" },
+                            { name: "city", value: "", label: "City" },
+                            { name: "state", value: "", label: "State/Province" },
+                            { name: "zip", value: "", label: "ZIP/Postal Code" },
+                            { name: "country", value: "", label: "Country" },
+                            { name: "card_number", value: "", label: "Credit Card Number" },
+                            { name: "card_expiry", value: "", label: "Expiry Date" },
+                            { name: "card_cvv", value: "", label: "CVV" }
+                        ]
+                    }
+                };
+            }
+
+            // Add a new form data profile
+            addFormData(name, description, fields) {
+                const profile = {
+                    id: Date.now().toString(),
+                    name,
+                    description,
+                    fields,
+                    created: new Date().toISOString(),
+                    updated: new Date().toISOString()
+                };
+                this.formDataProfiles.push(profile);
+                this.saveFormData();
+                return profile;
+            }
+
+            // Get a form data profile by ID
+            getFormData(id) {
+                return this.formDataProfiles.find(profile => profile.id === id);
+            }
+
+            // Update a form data profile
+            updateFormData(id, name, description, fields) {
+                const index = this.formDataProfiles.findIndex(profile => profile.id === id);
+                if (index !== -1) {
+                    this.formDataProfiles[index] = {
+                        ...this.formDataProfiles[index],
+                        name,
+                        description,
+                        fields,
+                        updated: new Date().toISOString()
+                    };
+                    this.saveFormData();
+                    return this.formDataProfiles[index];
+                }
+                return null;
+            }
+
+            // Delete a form data profile
+            deleteFormData(id) {
+                this.formDataProfiles = this.formDataProfiles.filter(profile => profile.id !== id);
+                this.saveFormData();
+            }
+
+            // Use a template to create a new form data profile
+            useTemplate(templateName) {
+                const template = this.formTemplates[templateName];
+                if (template) {
+                    // Create a deep copy of the template fields
+                    const fields = JSON.parse(JSON.stringify(template.fields));
+                    return this.addFormData(template.name, template.description, fields);
+                }
+                return null;
+            }
+
+            // Fill a form using a form data profile
+            fillForm(profileId, formUrl = null) {
+                const profile = this.getFormData(profileId);
+                if (!profile) {
+                    console.error('Form data profile not found');
+                    return false;
+                }
+
+                // In a real implementation, this would interact with the actual form on the page
+                // For this demo, we'll simulate the form filling and show a message
+                
+                if (formUrl) {
+                    console.log(`Navigating to ${formUrl} and filling form with profile: ${profile.name}`);
+                    // In a real implementation, we would navigate to the URL and then fill the form
+                } else {
+                    console.log(`Filling current page form with profile: ${profile.name}`);
+                }
+
+                // Simulate filling each field
+                profile.fields.forEach(field => {
+                    console.log(`Filling field ${field.name} (${field.label}) with value: ${field.value}`);
+                    // In a real implementation, this would find the form field and set its value
+                });
+
+                return true;
+            }
+        }
+
+        // Workflow Engine
+        class WorkflowEngine {
+            constructor() {
+                this.workflows = this.loadWorkflows();
+                this.currentWorkflow = [];
+                this.formDataEngine = new FormDataEngine();
+            }
+
+            // Load workflows from localStorage
+            loadWorkflows() {
+                const stored = localStorage.getItem('autoflow-workflows');
+                return stored ? JSON.parse(stored) : [];
+            }
+
+            // Save workflows to localStorage
+            saveWorkflows() {
+                localStorage.setItem('autoflow-workflows', JSON.stringify(this.workflows));
+            }
+
+            // Add a workflow
+            addWorkflow(name, description, steps) {
+                const workflow = {
+                    id: Date.now().toString(),
+                    name,
+                    description,
+                    steps,
+                    created: new Date().toISOString(),
+                    executions: 0,
+                    lastExecuted: null,
+                    active: true
+                };
+                this.workflows.push(workflow);
+                this.saveWorkflows();
+                return workflow;
+            }
+
+            // Get a workflow by ID
+            getWorkflow(id) {
+                return this.workflows.find(w => w.id === id);
+            }
+
+            // Update a workflow
+            updateWorkflow(id, name, description, steps) {
+                const index = this.workflows.findIndex(w => w.id === id);
+                if (index !== -1) {
+                    this.workflows[index] = {
+                        ...this.workflows[index],
+                        name,
+                        description,
+                        steps,
+                        updated: new Date().toISOString()
+                    };
+                    this.saveWorkflows();
+                    return this.workflows[index];
+                }
+                return null;
+            }
+
+            // Delete a workflow
+            deleteWorkflow(id) {
+                const workflow = this.getWorkflow(id);
+                this.workflows = this.workflows.filter(w => w.id !== id);
+                this.saveWorkflows();
+            }
+
+            // Execute a workflow
+            async executeWorkflow(steps) {
+                for (let i = 0; i < steps.length; i++) {
+                    const step = steps[i];
+                    try {
+                        // Update UI to show current step
+                        this.highlightStep(i);
+                        
+                        // Simulate execution with a delay
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+                        
+                        // Execute the step based on its type
+                        await this.executeStep(step);
+                    } catch (error) {
+                        console.error(`Error executing step ${i}:`, error);
+                        alert(`Error executing step ${i + 1}: ${step.name}. Check the console for details.`);
+                        break;
+                    }
+                }
+                
+                // Reset UI after execution
+                this.resetStepHighlights();
+                alert('Workflow execution completed!');
+            }
+
+            // Execute a single step
+            async executeStep(step) {
+                switch (step.type) {
+                    case 'fill-form':
+                        // Use the form data engine to fill the form
+                        if (step.data && step.data.profileId) {
+                            const success = this.formDataEngine.fillForm(step.data.profileId, step.data.formUrl);
+                            if (success) {
+                                console.log('Form filled successfully');
+                            } else {
+                                console.error('Failed to fill form');
+                            }
+                        } else {
+                            console.error('No form data profile selected for fill-form action');
+                        }
+                        break;
+                    case 'click-button':
+                        // In a real implementation, this would find and click buttons
+                        console.log('Clicking button:', step.data);
+                        break;
+                    case 'send-notification':
+                        // Show a browser notification if permitted
+                        if ('Notification' in window && Notification.permission === 'granted') {
+                            new Notification('AutoFlow Notification', {
+                                body: step.data.message || 'Your automation has reached this step'
+                            });
+                        }
+                        console.log('Sending notification:', step.data);
+                        break;
+                    case 'extract-data':
+                        // In a real implementation, this would extract data from the page
+                        console.log('Extracting data:', step.data);
+                        break;
+                    case 'schedule-task':
+                        // In a real implementation, this would schedule a task
+                        console.log('Scheduling task:', step.data);
+                        break;
+                    default:
+                        console.warn('Unknown step type:', step.type);
+                }
+            }
+
+            // Highlight the current step during execution
+            highlightStep(index) {
+                const steps = document.querySelectorAll('.workflow-step');
+                if (steps[index]) {
+                    steps[index].classList.add('executing');
+                }
+            }
+
+            // Reset step highlights after execution
+            resetStepHighlights() {
+                const steps = document.querySelectorAll('.workflow-step');
+                steps.forEach(step => {
+                    step.classList.remove('executing');
+                });
+            }
+
+            // Export workflow as JSON
+            exportWorkflow(workflow) {
+                return JSON.stringify(workflow, null, 2);
+            }
+
+            // Import workflow from JSON
+            importWorkflow(json) {
+                try {
+                    const workflow = JSON.parse(json);
+                    // Validate the workflow structure
+                    if (workflow.name && workflow.steps && Array.isArray(workflow.steps)) {
+                        workflow.id = Date.now().toString();
+                        workflow.created = new Date().toISOString();
+                        workflow.executions = 0;
+                        workflow.lastExecuted = null;
+                        workflow.active = true;
+                        this.workflows.push(workflow);
+                        this.saveWorkflows();
+                        return workflow;
+                    } else {
+                        throw new Error('Invalid workflow format');
+                    }
+                } catch (error) {
+                    console.error('Error importing workflow:', error);
+                    alert('Error importing workflow. Please check the file format.');
+                    return null;
+                }
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            const authSystem = new AuthSystem();
+            const workflowEngine = new WorkflowEngine();
+            let currentWorkflowId = null;
+            let currentEditingFormDataId = null;
+
+            // Authentication Modal Elements
+            const authModal = document.getElementById('auth-modal');
+            const loginBtn = document.getElementById('login-btn');
+            const authTabs = document.querySelectorAll('.auth-tab');
+            const authForms = document.querySelectorAll('.auth-form');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const showSignup = document.getElementById('show-signup');
+            const showLogin = document.getElementById('show-login');
+            const logoutBtn = document.getElementById('logout-btn');
+            const profileBtn = document.getElementById('profile-btn');
+            const userAvatar = document.getElementById('user-avatar');
+            const dropdownMenu = document.getElementById('dropdown-menu');
+
+            // Show login modal
+            loginBtn.addEventListener('click', function() {
+                authModal.classList.add('active');
+                switchAuthTab('login');
+            });
+
+            // Switch between login and signup tabs
+            authTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabName = this.dataset.tab;
+                    switchAuthTab(tabName);
+                });
+            });
+
+            // Show signup form
+            showSignup.addEventListener('click', function() {
+                switchAuthTab('signup');
+            });
+
+            // Show login form
+            showLogin.addEventListener('click', function() {
+                switchAuthTab('login');
+            });
+
+            // Switch authentication tab
+            function switchAuthTab(tabName) {
+                // Update tabs
+                authTabs.forEach(tab => {
+                    if (tab.dataset.tab === tabName) {
+                        tab.classList.add('active');
+                    } else {
+                        tab.classList.remove('active');
+                    }
+                });
+
+                // Update forms
+                authForms.forEach(form => {
+                    if (form.id === `${tabName}-form`) {
+                        form.classList.add('active');
+                    } else {
+                        form.classList.remove('active');
+                    }
+                });
+            }
+
+            // Login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                const result = authSystem.login(email, password);
+                
+                if (result.success) {
+                    authModal.classList.remove('active');
+                    loginForm.reset();
+                    alert('Login successful!');
+                } else {
+                    alert(result.message);
+                }
+            });
+
+            // Signup form submission
+            signupForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('signup-name').value;
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
+                const confirmPassword = document.getElementById('signup-confirm-password').value;
+                
+                // Validate passwords match
+                if (password !== confirmPassword) {
+                    alert('Passwords do not match');
+                    return;
+                }
+                
+                const result = authSystem.register(name, email, password);
+                
+                if (result.success) {
+                    authModal.classList.remove('active');
+                    signupForm.reset();
+                    alert('Account created successfully!');
+                } else {
+                    alert(result.message);
+                }
+            });
+
+            // Logout functionality
+            logoutBtn.addEventListener('click', function() {
+                authSystem.logout();
+                alert('You have been logged out');
+            });
+
+            // Profile button functionality
+            profileBtn.addEventListener('click', function() {
+                alert('Profile page would open here');
+                // In a real implementation, this would navigate to a profile page
+            });
+
+            // User avatar dropdown
+            userAvatar.addEventListener('click', function() {
+                dropdownMenu.classList.toggle('show');
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.user-dropdown')) {
+                    dropdownMenu.classList.remove('show');
+                }
+            });
+
+            // Close auth modal when clicking outside
+            authModal.addEventListener('click', function(e) {
+                if (e.target === authModal) {
+                    authModal.classList.remove('active');
+                }
+            });
+
+            // Accessibility Features
+            const decreaseFontBtn = document.getElementById('decrease-font');
+            const resetFontBtn = document.getElementById('reset-font');
+            const increaseFontBtn = document.getElementById('increase-font');
+            const contrastToggle = document.getElementById('contrast-toggle');
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            decreaseFontBtn.addEventListener('click', function() {
+                changeFontSize(-1);
+            });
+            
+            resetFontBtn.addEventListener('click', function() {
+                document.body.style.fontSize = '';
+            });
+            
+            increaseFontBtn.addEventListener('click', function() {
+                changeFontSize(1);
+            });
+            
+            function changeFontSize(direction) {
+                const currentSize = parseFloat(getComputedStyle(document.body).fontSize);
+                const newSize = currentSize + (direction * 2);
+                document.body.style.fontSize = newSize + 'px';
+            }
+            
+            // High contrast toggle
+            contrastToggle.addEventListener('click', function() {
+                document.body.classList.toggle('high-contrast');
+                if (document.body.classList.contains('high-contrast')) {
+                    contrastToggle.textContent = 'Normal Contrast';
+                } else {
+                    contrastToggle.textContent = 'High Contrast';
+                }
+            });
+            
+            // Dark/Light mode toggle
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = document.documentElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-theme', newTheme);
+                themeToggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+                localStorage.setItem('autoflow-theme', newTheme);
+            });
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('autoflow-theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+            // Drag and drop functionality for automation builder
+            const actionItems = document.querySelectorAll('.action-item');
+            const workflowArea = document.getElementById('workflow-area');
+            const workflowSteps = document.getElementById('workflow-steps');
+            const runAutomationBtn = document.getElementById('run-automation');
+            const saveWorkflowBtn = document.getElementById('save-workflow');
+            const clearWorkflowBtn = document.getElementById('clear-workflow');
+            const importWorkflowBtn = document.getElementById('import-workflow');
+            const importFileInput = document.getElementById('import-file');
+            
+            // Set up drag events for action items
+            actionItems.forEach(item => {
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('text/plain', e.target.dataset.action);
+                });
+                
+                // Keyboard accessibility for action items
+                item.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        addActionToWorkflow(e.target.dataset.action);
+                    }
+                });
+            });
+            
+            // Set up drop events for workflow area
+            workflowArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                workflowArea.style.borderColor = 'var(--primary)';
+                workflowArea.style.backgroundColor = 'var(--gray-light)';
+            });
+            
+            workflowArea.addEventListener('dragleave', function() {
+                workflowArea.style.borderColor = 'var(--gray)';
+                workflowArea.style.backgroundColor = '';
+            });
+            
+            workflowArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                workflowArea.style.borderColor = 'var(--gray)';
+                workflowArea.style.backgroundColor = '';
+                
+                const actionType = e.dataTransfer.getData('text/plain');
+                addActionToWorkflow(actionType);
+            });
+            
+            // Function to add action to workflow
+            function addActionToWorkflow(actionType) {
+                const action = {
+                    id: Date.now(),
+                    type: actionType,
+                    name: getActionName(actionType),
+                    data: getDefaultDataForAction(actionType)
+                };
+                
+                // For fill-form actions, show configuration modal
+                if (actionType === 'fill-form') {
+                    showFillFormConfigModal(action);
+                } else {
+                    workflowEngine.currentWorkflow.push(action);
+                    updateWorkflowDisplay();
+                }
+            }
+            
+            // Function to get display name for action
+            function getActionName(actionType) {
+                const actionNames = {
+                    'fill-form': 'Fill Form',
+                    'click-button': 'Click Button',
+                    'send-notification': 'Send Notification',
+                    'extract-data': 'Extract Data',
+                    'schedule-task': 'Schedule Task'
+                };
+                
+                return actionNames[actionType] || 'Unknown Action';
+            }
+            
+            // Function to get default data for an action
+            function getDefaultDataForAction(actionType) {
+                const defaultData = {
+                    'fill-form': { profileId: '', formUrl: '' },
+                    'click-button': { selector: '' },
+                    'send-notification': { message: 'Notification from AutoFlow' },
+                    'extract-data': { selector: '', storage: 'variable' },
+                    'schedule-task': { time: '09:00', repeat: 'daily' }
+                };
+                
+                return defaultData[actionType] || {};
+            }
+            
+            // Function to update workflow display
+            function updateWorkflowDisplay() {
+                workflowSteps.innerHTML = '';
+                
+                if (workflowEngine.currentWorkflow.length === 0) {
+                    workflowArea.style.display = 'flex';
+                    return;
+                }
+                
+                workflowArea.style.display = 'none';
+                
+                workflowEngine.currentWorkflow.forEach((action, index) => {
+                    const stepElement = document.createElement('div');
+                    stepElement.className = 'workflow-step';
+                    stepElement.setAttribute('data-step-id', action.id);
+                    
+                    let stepDescription = '';
+                    if (action.type === 'fill-form' && action.data.profileId) {
+                        const profile = workflowEngine.formDataEngine.getFormData(action.data.profileId);
+                        stepDescription = profile ? `Using: ${profile.name}` : 'Form data profile not found';
+                    }
+                    
+                    stepElement.innerHTML = `
+                        <div>
+                            <h4>${action.name}</h4>
+                            <p>Step ${index + 1} ${stepDescription ? `- ${stepDescription}` : ''}</p>
+                        </div>
+                        <div class="step-actions">
+                            <button class="btn btn-secondary edit-step" data-id="${action.id}">Edit</button>
+                            <button class="btn btn-secondary remove-step" data-id="${action.id}">Remove</button>
+                        </div>
+                    `;
+                    workflowSteps.appendChild(stepElement);
+                });
+                
+                // Add event listeners to remove buttons
+                document.querySelectorAll('.remove-step').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const actionId = parseInt(this.dataset.id);
+                        workflowEngine.currentWorkflow = workflowEngine.currentWorkflow.filter(action => action.id !== actionId);
+                        updateWorkflowDisplay();
+                    });
+                });
+                
+                // Add event listeners to edit buttons
+                document.querySelectorAll('.edit-step').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const actionId = parseInt(this.dataset.id);
+                        const action = workflowEngine.currentWorkflow.find(a => a.id === actionId);
+                        if (action) {
+                            if (action.type === 'fill-form') {
+                                showFillFormConfigModal(action);
+                            } else {
+                                editAction(action);
+                            }
+                        }
+                    });
+                });
+            }
+            
+            // Function to edit an action (for non-fill-form actions)
+            function editAction(action) {
+                const newName = prompt('Edit action name:', action.name);
+                if (newName) {
+                    action.name = newName;
+                    updateWorkflowDisplay();
+                }
+            }
+            
+            // Show fill form configuration modal
+            function showFillFormConfigModal(action) {
+                const fillFormModal = document.getElementById('fill-form-modal');
+                const closeFillFormModal = document.getElementById('close-fill-form-modal');
+                const cancelFillForm = document.getElementById('cancel-fill-form');
+                const fillFormConfigForm = document.getElementById('fill-form-config-form');
+                const formDataSelect = document.getElementById('form-data-select');
+                const formUrlInput = document.getElementById('form-url');
+                
+                // Populate the form data select
+                formDataSelect.innerHTML = '<option value="">-- Select a form data profile --</option>';
+                workflowEngine.formDataEngine.formDataProfiles.forEach(profile => {
+                    const option = document.createElement('option');
+                    option.value = profile.id;
+                    option.textContent = profile.name;
+                    if (action.data.profileId === profile.id) {
+                        option.selected = true;
+                    }
+                    formDataSelect.appendChild(option);
+                });
+                
+                // Set current values
+                formUrlInput.value = action.data.formUrl || '';
+                
+                fillFormModal.style.display = 'flex';
+                
+                // Handle form submission
+                fillFormConfigForm.onsubmit = function(e) {
+                    e.preventDefault();
+                    
+                    const profileId = formDataSelect.value;
+                    const formUrl = formUrlInput.value;
+                    
+                    if (!profileId) {
+                        alert('Please select a form data profile');
+                        return;
+                    }
+                    
+                    // Update the action data
+                    action.data = {
+                        profileId,
+                        formUrl
+                    };
+                    
+                    // If this is a new action, add it to the workflow
+                    if (!workflowEngine.currentWorkflow.find(a => a.id === action.id)) {
+                        workflowEngine.currentWorkflow.push(action);
+                    }
+                    
+                    updateWorkflowDisplay();
+                    fillFormModal.style.display = 'none';
+                };
+                
+                // Handle modal close
+                closeFillFormModal.addEventListener('click', function() {
+                    fillFormModal.style.display = 'none';
+                });
+                
+                cancelFillForm.addEventListener('click', function() {
+                    fillFormModal.style.display = 'none';
+                });
+            }
+            
+            // Run automation button
+            runAutomationBtn.addEventListener('click', function() {
+                if (workflowEngine.currentWorkflow.length === 0) {
+                    alert('Please add at least one action to your workflow.');
+                    return;
+                }
+                
+                // Request notification permission if needed
+                if ('Notification' in window && Notification.permission === 'default') {
+                    Notification.requestPermission();
+                }
+                
+                // Execute the workflow
+                workflowEngine.executeWorkflow(workflowEngine.currentWorkflow);
+            });
+            
+            // Clear workflow button
+            clearWorkflowBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear the current workflow?')) {
+                    workflowEngine.currentWorkflow = [];
+                    updateWorkflowDisplay();
+                }
+            });
+            
+            // Save workflow button and modal
+            const saveModal = document.getElementById('save-modal');
+            const closeSaveModal = document.getElementById('close-save-modal');
+            const cancelSave = document.getElementById('cancel-save');
+            const saveWorkflowForm = document.getElementById('save-workflow-form');
+            
+            saveWorkflowBtn.addEventListener('click', function() {
+                if (workflowEngine.currentWorkflow.length === 0) {
+                    alert('Please add at least one action to your workflow before saving.');
+                    return;
+                }
+                
+                // If we're editing an existing workflow, pre-fill the form
+                if (currentWorkflowId) {
+                    const workflow = workflowEngine.getWorkflow(currentWorkflowId);
+                    if (workflow) {
+                        document.getElementById('workflow-name').value = workflow.name;
+                        document.getElementById('workflow-description').value = workflow.description || '';
+                    }
+                }
+                
+                saveModal.style.display = 'flex';
+            });
+            
+            closeSaveModal.addEventListener('click', function() {
+                saveModal.style.display = 'none';
+            });
+            
+            cancelSave.addEventListener('click', function() {
+                saveModal.style.display = 'none';
+            });
+            
+            saveWorkflowForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('workflow-name').value;
+                const description = document.getElementById('workflow-description').value;
+                
+                if (currentWorkflowId) {
+                    // Update existing workflow
+                    workflowEngine.updateWorkflow(
+                        currentWorkflowId, 
+                        name, 
+                        description, 
+                        workflowEngine.currentWorkflow
+                    );
+                } else {
+                    // Create new workflow
+                    workflowEngine.addWorkflow(name, description, workflowEngine.currentWorkflow);
+                }
+                
+                saveModal.style.display = 'none';
+                loadWorkflowsList();
+                alert('Workflow saved successfully!');
+            });
+            
+            // Import workflow functionality
+            importWorkflowBtn.addEventListener('click', function() {
+                importFileInput.click();
+            });
+            
+            importFileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const workflow = workflowEngine.importWorkflow(event.target.result);
+                        if (workflow) {
+                            loadWorkflowsList();
+                            alert('Workflow imported successfully!');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+                
+                // Reset the file input
+                e.target.value = '';
+            });
+            
+            // Load and display workflows
+            function loadWorkflowsList() {
+                const workflowList = document.getElementById('workflow-list');
+                workflowList.innerHTML = '';
+                
+                if (workflowEngine.workflows.length === 0) {
+                    workflowList.innerHTML = '<p>No workflows saved yet. Create your first workflow using the builder above!</p>';
+                    return;
+                }
+                
+                workflowEngine.workflows.forEach(workflow => {
+                    const workflowCard = document.createElement('div');
+                    workflowCard.className = 'workflow-card card';
+                    workflowCard.innerHTML = `
+                        <h3>${workflow.name}</h3>
+                        <p>${workflow.description || 'No description'}</p>
+                        <p><small>Created: ${new Date(workflow.created).toLocaleDateString()}</small></p>
+                        <div class="workflow-actions">
+                            <button class="btn btn-primary load-workflow" data-id="${workflow.id}">Load</button>
+                            <button class="btn btn-secondary export-workflow" data-id="${workflow.id}">Export</button>
+                            <button class="btn btn-secondary delete-workflow" data-id="${workflow.id}">Delete</button>
+                        </div>
+                    `;
+                    workflowList.appendChild(workflowCard);
+                });
+                
+                // Add event listeners to workflow actions
+                document.querySelectorAll('.load-workflow').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const workflowId = this.dataset.id;
+                        const workflow = workflowEngine.getWorkflow(workflowId);
+                        if (workflow) {
+                            workflowEngine.currentWorkflow = [...workflow.steps];
+                            currentWorkflowId = workflowId;
+                            updateWorkflowDisplay();
+                            // Scroll to builder
+                            document.getElementById('builder').scrollIntoView({ behavior: 'smooth' });
+                            alert('Workflow loaded!');
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('.delete-workflow').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const workflowId = this.dataset.id;
+                        if (confirm('Are you sure you want to delete this workflow?')) {
+                            workflowEngine.deleteWorkflow(workflowId);
+                            loadWorkflowsList();
+                        }
+                    });
+                });
+            }
+            
+            // Form Data Storage Functionality
+            const formDataTabs = document.querySelectorAll('.form-data-tab');
+            const formDataTabContents = document.querySelectorAll('.form-data-tab-content');
+            
+            // Tab switching
+            formDataTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    
+                    // Update active tab
+                    formDataTabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding content
+                    formDataTabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-tab`) {
+                            content.classList.add('active');
+                        }
+                    });
+                    
+                    // If switching to My Data tab, reload the form data list
+                    if (tabId === 'my-data') {
+                        loadFormDataList();
+                    }
+                });
+            });
+            
+            // Load form data list
+            function loadFormDataList() {
+                const formDataList = document.getElementById('form-data-list');
+                formDataList.innerHTML = '';
+                
+                if (workflowEngine.formDataEngine.formDataProfiles.length === 0) {
+                    formDataList.innerHTML = '<p>No form data saved yet. Add your first form data profile using the "Add New Data" tab!</p>';
+                    return;
+                }
+                
+                workflowEngine.formDataEngine.formDataProfiles.forEach(profile => {
+                    const formDataCard = document.createElement('div');
+                    formDataCard.className = 'form-data-card card';
+                    formDataCard.innerHTML = `
+                        <h4>${profile.name}</h4>
+                        <p>${profile.description || 'No description'}</p>
+                        <p><small>${profile.fields.length} fields • Updated: ${new Date(profile.updated).toLocaleDateString()}</small></p>
+                        <div class="form-data-actions">
+                            <button class="btn btn-primary edit-form-data" data-id="${profile.id}">Edit</button>
+                            <button class="btn btn-secondary use-form-data" data-id="${profile.id}">Use in Workflow</button>
+                            <button class="btn btn-danger delete-form-data" data-id="${profile.id}">Delete</button>
+                        </div>
+                    `;
+                    formDataList.appendChild(formDataCard);
+                });
+                
+                // Add event listeners to form data actions
+                document.querySelectorAll('.edit-form-data').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const formDataId = this.dataset.id;
+                        showEditFormDataModal(formDataId);
+                    });
+                });
+                
+                document.querySelectorAll('.use-form-data').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const formDataId = this.dataset.id;
+                        // Add a fill-form action to the workflow with this form data
+                        const action = {
+                            id: Date.now(),
+                            type: 'fill-form',
+                            name: 'Fill Form',
+                            data: {
+                                profileId: formDataId,
+                                formUrl: ''
+                            }
+                        };
+                        workflowEngine.currentWorkflow.push(action);
+                        updateWorkflowDisplay();
+                        // Scroll to builder
+                        document.getElementById('builder').scrollIntoView({ behavior: 'smooth' });
+                        alert('Form data added to workflow!');
+                    });
+                });
+                
+                document.querySelectorAll('.delete-form-data').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const formDataId = this.dataset.id;
+                        const profile = workflowEngine.formDataEngine.getFormData(formDataId);
+                        if (profile && confirm(`Are you sure you want to delete the form data profile "${profile.name}"?`)) {
+                            workflowEngine.formDataEngine.deleteFormData(formDataId);
+                            loadFormDataList();
+                        }
+                    });
+                });
+            }
+            
+            // Add form data functionality
+            const addFormDataForm = document.getElementById('add-form-data-form');
+            const addFieldBtn = document.getElementById('add-field-btn');
+            const fieldList = document.getElementById('field-list');
+            
+            // Add field button
+            addFieldBtn.addEventListener('click', function() {
+                addFieldToForm(fieldList);
+            });
+            
+            // Function to add a field to the form
+            function addFieldToForm(container, field = { name: '', value: '', label: '' }) {
+                const fieldItem = document.createElement('div');
+                fieldItem.className = 'field-item';
+                fieldItem.innerHTML = `
+                    <div class="field-name">
+                        <input type="text" class="form-control field-name-input" placeholder="Field Name (e.g., first_name)" value="${field.name}" required>
+                    </div>
+                    <div class="field-value">
+                        <input type="text" class="form-control field-value-input" placeholder="Field Value" value="${field.value}">
+                    </div>
+                    <div class="field-label">
+                        <input type="text" class="form-control field-label-input" placeholder="Display Label (e.g., First Name)" value="${field.label}">
+                    </div>
+                    <div class="field-actions">
+                        <button type="button" class="btn btn-danger remove-field">×</button>
+                    </div>
+                `;
+                container.appendChild(fieldItem);
+                
+                // Add event listener to remove button
+                fieldItem.querySelector('.remove-field').addEventListener('click', function() {
+                    fieldItem.remove();
+                });
+            }
+            
+            // Add form data form submission
+            addFormDataForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = document.getElementById('form-data-name').value;
+                const description = document.getElementById('form-data-description').value;
+                
+                // Collect field data
+                const fields = [];
+                const fieldItems = fieldList.querySelectorAll('.field-item');
+                fieldItems.forEach(item => {
+                    const nameInput = item.querySelector('.field-name-input');
+                    const valueInput = item.querySelector('.field-value-input');
+                    const labelInput = item.querySelector('.field-label-input');
+                    
+                    if (nameInput.value.trim()) {
+                        fields.push({
+                            name: nameInput.value.trim(),
+                            value: valueInput.value.trim(),
+                            label: labelInput.value.trim() || nameInput.value.trim()
+                        });
+                    }
+                });
+                
+                if (fields.length === 0) {
+                    alert('Please add at least one field to your form data profile.');
+                    return;
+                }
+                
+                // Add the form data profile
+                workflowEngine.formDataEngine.addFormData(name, description, fields);
+                
+                // Reset the form
+                addFormDataForm.reset();
+                fieldList.innerHTML = '';
+                
+                // Switch to My Data tab
+                document.querySelector('.form-data-tab[data-tab="my-data"]').click();
+                
+                alert('Form data profile saved successfully!');
+            });
+            
+            // Template functionality
+            const useTemplateButtons = document.querySelectorAll('.use-template');
+            
+            useTemplateButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const templateName = this.dataset.template;
+                    const profile = workflowEngine.formDataEngine.useTemplate(templateName);
+                    
+                    if (profile) {
+                        // Switch to Add New Data tab and pre-fill the form
+                        document.querySelector('.form-data-tab[data-tab="add-data"]').click();
+                        
+                        document.getElementById('form-data-name').value = profile.name;
+                        document.getElementById('form-data-description').value = profile.description || '';
+                        
+                        // Clear existing fields and add template fields
+                        fieldList.innerHTML = '';
+                        profile.fields.forEach(field => {
+                            addFieldToForm(fieldList, field);
+                        });
+                        
+                        alert('Template loaded! Fill in your specific values and save.');
+                    }
+                });
+            });
+            
+            // Edit form data modal
+            const editFormDataModal = document.getElementById('edit-form-data-modal');
+            const closeEditFormDataModal = document.getElementById('close-edit-form-data-modal');
+            const editFormDataForm = document.getElementById('edit-form-data-form');
+            const addEditFieldBtn = document.getElementById('add-edit-field-btn');
+            const editFieldList = document.getElementById('edit-field-list');
+            
+            // Show edit form data modal
+            function showEditFormDataModal(formDataId) {
+                const profile = workflowEngine.formDataEngine.getFormData(formDataId);
+                if (!profile) return;
+                
+                currentEditingFormDataId = formDataId;
+                
+                // Populate the form
+                document.getElementById('edit-form-data-id').value = profile.id;
+                document.getElementById('edit-form-data-name').value = profile.name;
+                document.getElementById('edit-form-data-description').value = profile.description || '';
+                
+                // Populate fields
+                editFieldList.innerHTML = '';
+                profile.fields.forEach(field => {
+                    addFieldToForm(editFieldList, field);
+                });
+                
+                editFormDataModal.style.display = 'flex';
+            }
+            
+            // Add field button for edit form
+            addEditFieldBtn.addEventListener('click', function() {
+                addFieldToForm(editFieldList);
+            });
+            
+            // Edit form data form submission
+            editFormDataForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const id = document.getElementById('edit-form-data-id').value;
+                const name = document.getElementById('edit-form-data-name').value;
+                const description = document.getElementById('edit-form-data-description').value;
+                
+                // Collect field data
+                const fields = [];
+                const fieldItems = editFieldList.querySelectorAll('.field-item');
+                fieldItems.forEach(item => {
+                    const nameInput = item.querySelector('.field-name-input');
+                    const valueInput = item.querySelector('.field-value-input');
+                    const labelInput = item.querySelector('.field-label-input');
+                    
+                    if (nameInput.value.trim()) {
+                        fields.push({
+                            name: nameInput.value.trim(),
+                            value: valueInput.value.trim(),
+                            label: labelInput.value.trim() || nameInput.value.trim()
+                        });
+                    }
+                });
+                
+                if (fields.length === 0) {
+                    alert('Please add at least one field to your form data profile.');
+                    return;
+                }
+                
+                // Update the form data profile
+                workflowEngine.formDataEngine.updateFormData(id, name, description, fields);
+                
+                // Close the modal
+                editFormDataModal.style.display = 'none';
+                
+                // Reload the form data list
+                loadFormDataList();
+                
+                alert('Form data profile updated successfully!');
+            });
+            
+            // Close edit form data modal
+            closeEditFormDataModal.addEventListener('click', function() {
+                editFormDataModal.style.display = 'none';
+            });
+            
+            // Initialize the workflows list
+            loadWorkflowsList();
+            
+            // Initialize form data list
+            loadFormDataList();
+            
+            // Close modals when clicking outside
+            window.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.style.display = 'none';
+                }
+            });
+        });
+         
+    </script>
+    </body>
+    </html>
